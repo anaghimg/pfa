@@ -10,17 +10,12 @@ const cors = require('cors'); // Importez le module CORS
 const jwt = require('jsonwebtoken');
 const Societe = require('./models/Societe');
 const Offre = require('./models/Offre');
-const Quiz = require('./models/Quiz');
-const Question = require('./models/Question');
-const Reponse = require('./models/Reponse');
-const ReponseCandidat = require('./models/ResponseCandidat');
 const upload = require('./middleware/upload')
 
 const loginRoute = require('./routes/login');
 const registerRoute = require('./routes/register');
 const UtilisateurRoute = require('./routes/utilisateur');
 const OffreRoute = require('./routes/offre');
-const QuizRoute = require('./routes/quiz');
 const SocieteRoute = require('./routes/societe');
 const Utilisateur = require('./models/Utilisateur');
 const registerSocieteRoute = require('./routes/registerSociete');
@@ -170,152 +165,6 @@ router.get('/user-role', verifyToken, (req, res) => {
 
 
 
-app.get("/api/Questions", async (req, res) => {
-  try {
-    // Récupérer toutes les questions avec le titre du quiz
-    const questions = await Question.find().populate('quiz');
-
-    // Pour chaque question, récupérer les réponses associées
-    const questionsWithReponses = await Promise.all(questions.map(async (question) => {
-      // Récupérer les réponses de la question
-      const reponses = await Reponse.find({ question: question._id });
-
-      const mappedReponses = reponses.map(reponse => ({
-        _id: reponse._id,
-        reponses: reponse.reponses.map(rep => ({
-          reponse: rep.reponse,
-          _id: rep._id
-        })),
-        correctionReponse: reponse.correctionReponse // ou d'autres champs nécessaires
-      }));
-      
-      
-
-      return {
-        _id: question._id,
-        titreQuiz: question.quiz.titre,
-        contenu: question.contenu,
-        reponses: mappedReponses
-      };
-    }));
-
-    res.json(questionsWithReponses);
-  } catch (error) {
-    console.error('Erreur lors de la récupération des questions avec réponses:', error);
-    res.status(500).json({ message: "Erreur lors de la récupération des questions avec réponses." });
-  }
-});
-
-
-
-
-app.post("/api/Quiz/ResCandidat", verifyToken, upload.single("cv"), async (req, res) => {
-  try {
-    const reponses = JSON.parse(req.body.reponses); // Parse the JSON string
-    const cvFile = req.file;
-
-   
-
-    if (!Array.isArray(reponses)) {
-      return res.status(400).json({ message: "Les réponses sont manquantes ou mal formatées." });
-    }
-
-    let nombreDeBonnesReponses = 0;
-    const nombreTotalReponses = Reponse.length;
-    const questionsTraitees = new Set();
-
-    for (const { questionId, reponse, correctionReponseId } of reponses) {
-
-      let query = { question: questionId.toString() };
- 
-      if (correctionReponseId !== null && correctionReponseId !== undefined) {
-        query.correctionReponse = correctionReponseId;
-      }
-
-      const reponseCorrecte = await Reponse.findOne(query).select('correctionReponse');
-      console.log('reponsecorrect', reponseCorrecte);
-
-
-
-      if (reponseCorrecte && reponseCorrecte.correctionReponse === reponse) {
-        nombreDeBonnesReponses++;
-        console.log('reponse', reponse);
-      }
-  
-
-
-      questionsTraitees.add(questionId);
-    }
-
-    console.log('nombreDeBonnesReponses', nombreDeBonnesReponses);
-    console.log('nombreTotalReponses', nombreTotalReponses);
-
-    // Calcul du taux en ne tenant compte que des réponses avec correction
-    const taux = nombreTotalReponses > 0 ? (nombreDeBonnesReponses / nombreTotalReponses) * 100 : 0;
-    console.log('taux', taux);
-    if (!cvFile || !cvFile.path) {
-      return res.status(400).json({ message: "Le fichier CV est manquant." });
-    }
-
-    const newResponseCandidat = new ReponseCandidat({
-      reponse: reponses.map(({ reponseId }) => {
-        if (!mongoose.Types.ObjectId.isValid(reponseId)) {
-          throw new Error(`L'ID de réponse "${reponseId}" n'est pas valide.`);
-        }
-        return new ObjectId(reponseId);
-      }),
-      candidat: req.user._id,
-      taux: taux,
-      cvUrl: cvFile.path 
-    });
-
-    await newResponseCandidat.save();
-    res.status(200).json({ taux: taux });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors du traitement des réponses." });
-  }
-});
-
-
-
-app.get("/api/Quiz/ResCandidat", verifyToken, async (req, res) => {
-  try {
-
-    const responsesCandidat = await ReponseCandidat.find().populate('reponse').populate('candidat');
-    console.log(responsesCandidat)
-    res.json(responsesCandidat);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de la récupération des réponses des candidats." });
-  }
-});
-app.get("/api/Quiz", async (req, res) => {
-  try {
-    const quiz = await Quiz.findOne(); // Récupérer le quiz
-    if (!quiz) {
-      return res.status(404).json({ message: "Aucun quiz trouvé." });
-    }
-
-    // Récupérer les questions du quiz
-    const questions = await Question.find({ quiz: quiz._id });
-
-    // Récupérer les réponses associées aux questions
-    const questionsWithReponses = await Promise.all(questions.map(async (question) => {
-      const reponses = await Reponse.find({ question: question._id });
-      return { ...question.toObject(), reponses }; // Ajouter les réponses à la question
-    }));
-
-    // Remplacer les questions dans le quiz par les questions avec réponses
-    quiz.questions = questionsWithReponses;
-
-    res.status(200).json(quiz);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de la récupération du quiz." });
-  }
-});
-
 
 app.post("/api/registerSociete", upload.single("avatar"), (req, res) => {
   const formData = {
@@ -427,72 +276,7 @@ app.get('/api/societe', verifyToken, (req, res) => {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     });
 });
-app.post("/api/Quiz", verifyToken, async (req, res) => {
-  const { titre, durée, questions } = req.body;
-  try {
-    // Vérifiez si l'utilisateur est une société
-    if (req.decoded.role === 'Societe' && !req.decoded.companyId) {
-      return res.status(403).json({ message: 'Vous devez sélectionner une offre pour ajouter un quiz.' });
-    }
 
-    // Vérifiez si l'offre associée au quiz existe
-    const offre = await Offre.findOne({ _id: req.body.offreId });
-    if (!offre) {
-      return res.status(400).json({ message: "Offre invalide." });
-    }
-
-    // Créez le quiz avec le titre, la durée et l'ID de l'offre associée
-    const newQuiz = await Quiz.create({ titre, durée, offre: req.body.offreId });
-
-    // Créez les questions et les réponses associées
-    const createdQuestions = [];
-    for (const { contenu, reponses } of questions) {
-      const newQuestion = await Question.create({ contenu, quiz: newQuiz._id });
-
-      const createdReponses = [];
-      let correctReponseId; // Stocke l'ID de la réponse correcte
-
-      for (const { reponse, correctionReponse } of reponses) {
-        // Ajoutez une validation pour éviter d'enregistrer une réponse vide dans correctionReponse
-        if (correctionReponse !== "") {
-          const newReponse = await Reponse.create({ reponses, correctionReponse, question: newQuestion._id });
-          createdReponses.push(newReponse._id);
-
-          // Vérifiez si la réponse est correcte et mettez à jour correctReponseId
-          if (correctionReponse) {
-            correctReponseId = newReponse._id;
-          }
-        }
-      }
-
-      // Enregistrez l'ID de la réponse correcte dans la question
-      newQuestion.reponses = createdReponses;
-      newQuestion.correctReponse = correctReponseId;
-      await newQuestion.save();
-
-      createdQuestions.push(newQuestion._id);
-    }
-
-    newQuiz.questions = createdQuestions;
-    await newQuiz.save();
-
-    // Récupérez les réponses correctes pour chaque question
-    const correctReponses = await Promise.all(
-      createdQuestions.map(questionId => {
-        return Reponse.findOne({ _id: questionId.correctReponse }).lean(); // Convertit en objet JSON
-      })
-    );
-
-    // Vérifiez si les questions et les réponses ont été ajoutées
-    console.log("Questions ajoutées :", createdQuestions);
-    console.log("Réponses ajoutées :", newQuiz.questions);
-
-    res.status(201).json({ message: "Quiz créé avec succès.", newQuiz, correctReponses });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de la création du quiz." });
-  }
-});
 
 
 
@@ -511,31 +295,14 @@ app.use((err, req, res, next) => {
 });
 
 
-app.post('/api/Quiz/sendConfirmation', async (req, res) => {
-  const { email, taux } = req.body;
-  
-  
-  try {
-    if (taux > 60) {
-      await sendNodemailer(email, 'Confirmation', 'Félicitations, vous avez été accepté!');
-      console.log(`Email de confirmation envoyé à ${email}`);
-      res.status(200).send({ message: 'Email envoyé' });
-    } else {
-      console.log(`Le taux est inférieur à 60 pour ${email}`);
-      res.status(400).send({ message: 'Le taux est inférieur à 60' });
-    }
-  } catch (error) {
-    console.error('Erreur lors de l\'envoi de l\'email de confirmation :', error);
-    res.status(500).send({ message: 'Erreur lors de l\'envoi de l\'email de confirmation' });
-  }
-});
 
 app.use('/uploads', express.static('uploads'))
 app.use('/api/utilisateur', UtilisateurRoute);
 app.use('/api/offre', OffreRoute);
-app.use('/api/Quiz', QuizRoute);
+
 app.use('/api/societe', SocieteRoute);
 app.use('/api/register', registerRoute);
 app.use('/api/registerSociete', registerSocieteRoute);
 app.use('/api/login', loginRoute);
 app.use('/api', router); // Mount router here
+
