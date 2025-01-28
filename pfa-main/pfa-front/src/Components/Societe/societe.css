@@ -1,0 +1,29 @@
+.container {
+    border-radius: 8px; /* Bords arrondis pour le conteneur */
+    padding: 20px; /* Espacement intérieur */
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile pour les cartes */
+    border: none; /* Supprimer la bordure par défaut */
+  }
+  
+  .card-title {
+    color: #007bff; /* Couleur du titre (bleu Bootstrap par défaut) */
+    font-weight: bold; /* Rendre le titre plus épais */
+  }
+  
+  .card-text {
+    color: #6c757d; /* Couleur du texte (gris Bootstrap par défaut) */
+  }
+  
+  .button {
+    background-color: #28a745; /* Couleur de fond pour les boutons (vert Bootstrap par défaut) */
+    border-color: #28a745; /* Couleur de la bordure pour les boutons */
+  }
+  
+  .button:hover {
+    background-color: #218838; /* Couleur de fond au survol */
+    border-color: #1e7e34; /* Couleur de la bordure au survol */
+  }
+  

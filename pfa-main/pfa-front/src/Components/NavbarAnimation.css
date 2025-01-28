@@ -1,0 +1,46 @@
+/* NavbarAnimation.css */
+.animated-navbar {
+    background-color: #cedff53d;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .animated-navbar:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .nav-link, .navbar-brand, .nav-dropdown {
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-link:hover, .navbar-brand:hover, .nav-dropdown:hover {
+    color: #0056b3; /* Change to your brand color */
+  }
+  
+  /* Additional animations and styles */
+  .navbar-toggler {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .navbar-toggler:hover {
+    transform: rotate(90deg);
+  }
+  
+  .navbar-brand img {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .navbar-brand img:hover {
+    transform: scale(1.1);
+  }
+  
+  .nav-profile img {
+    transition: border 0.3s ease-in-out;
+  }
+  
+  .nav-profile:hover img {
+    border: 2px solid #0056b3; /* Change to your brand color */
+  }
+  
+  /* Ensure to add appropriate vendor prefixes for cross-browser compatibility */
+  

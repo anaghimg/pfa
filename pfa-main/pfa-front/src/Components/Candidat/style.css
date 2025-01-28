@@ -1,0 +1,274 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #007bffb4;
+  border-color: #007bffc3;
+}
+
+.btn-primary:hover {
+  background-color: #0057b3d3;
+  border-color: #0057b3b1;
+}
+
+
+.quiz-image-container {
+
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Styliser la présentation pour qu'elle soit absolue et superposée sur l'image */
+.presentation {
+  position: absolute;
+  top: 40%;
+  /* Centrer verticalement */
+  left: 10;
+  /* Aligner à gauche */
+  transform: translateY(-50%);
+  /* Ajuster le centrage vertical */
+  color: white;
+  /* Choisir une couleur de texte qui contraste avec l'image */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 20px;
+  /* Espacement autour du texte */
+  width: 50%;
+  /* Largeur de la présentation */
+}
+
+.quiz-image {
+  height: 400px;
+  width: 98%;
+  margin: 11px;
+}
+
+/* Styliser le formulaire de recherche */
+.search-form {
+  background-color: #d8e9f251;
+  /* Couleur de fond légère */
+  padding: 20px;
+
+  box-shadow: 0 2px 4px rgba(196, 228, 240, 0.1);
+}
+
+/* Styliser les champs de saisie */
+.search-input {
+  border: 1px solid #ddd;
+  /* Bordure subtile */
+  border-radius: 4px;
+  /* Bords arrondis */
+  padding: 10px;
+  /* Espacement interne pour une meilleure lisibilité */
+}
+
+/* Styliser le bouton de recherche */
+.search-button {
+  border: 1px solid #007bffe5;
+  /* Bordure de couleur verte */
+  color: #007bffb4;
+  /* Couleur du texte */
+  background-color: #fff;
+  /* Fond blanc */
+  padding: 10px 20px;
+  /* Espacement interne plus grand */
+  border-radius: 4px;
+  /* Bords arrondis */
+  transition: all 0.3s ease;
+  /* Transition douce pour les interactions */
+}
+
+.search-button:hover {
+  background-color: #007bffe5;
+  /* Fond vert au survol */
+  color: #fff;
+  /* Texte blanc pour un contraste élevé */
+}
+
+/* Styliser le carrousel */
+.carousel {
+  margin-top: 20px;
+}
+
+.carousel-item {
+  text-align: center;
+}
+
+.carousel-item img {
+  max-height: 200px;
+  max-width: 200px;
+  margin: 50px;
+  /* Centrer les images si elles ne sont pas assez larges */
+}
+
+/* Styliser les contrôles du carrousel */
+.carousel-control-prev,
+.carousel-control-next {
+  filter: invert(100%);
+  /* Rendre les flèches visibles sur des images claires ou foncées */
+}
+
+/* Styliser les indicateurs du carrousel */
+.carousel-indicators li {
+  background-color: #000;
+  /* Couleur des indicateurs */
+}
+
+.carousel-indicators .active {
+  background-color: #fff;
+  /* Couleur de l'indicateur actif */
+}
+
+footer {
+  background-color: #007bffb4;
+  /* Couleur de fond du pied de page */
+  color: #ffffff;
+  /* Couleur du texte */
+  padding: 40px 0;
+  /* Espacement vertical */
+}
+
+.footer h5 {
+  margin-bottom: 20px;
+}
+
+.footer ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.footer ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  /* Transition douce pour le changement de couleur */
+}
+
+.footer ul li a:hover {
+  color: #d1d1d1;
+  /* Couleur des liens au survol */
+}
+
+.footer a {
+  display: inline-block;
+  /* Pour appliquer la marge */
+  margin-right: 10px;
+  /* Espacement entre les liens */
+}
+
+/* Ajouter des icônes pour les réseaux sociaux si nécessaire */
+.footer .social-icons {
+  font-size: 24px;
+  /* Taille des icônes */
+}
+
+.footer .social-icons a {
+  color: #ffffff;
+  /* Couleur des icônes */
+}
+
+.footer .social-icons a:hover {
+  color: #d1d1d1;
+  /* Couleur des icônes au survol */
+}
+
+/* Styliser le conteneur du quiz */
+.quiz-container {
+  padding: 2rem 0;
+}
+
+/* Styliser le titre du quiz */
+.quiz-title {
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+/* Styliser les cartes de questions */
+.quiz-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Styliser les titres des questions */
+.question-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Styliser les options de réponse */
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+  margin-right: 0.5rem;
+}
+
+.form-check-label {
+  font-size: 1rem;
+}
+
+/* Styliser le bouton de soumission */
+.submit-btn {
+  padding: 0.5rem 2rem;
+  font-size: 1.2rem;
+
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* Ajoutez cette classe aux éléments input pour un effet de transition sur le focus */
+.input-transition:focus {
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.02);
+}
+
+header {
+  background-color: #007bffb4;
+}
+
+.modal-header .close {
+  margin-left: auto;
+}
